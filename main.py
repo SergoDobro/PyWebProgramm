@@ -60,9 +60,15 @@ def login(username: str = Body(...), password: str = Body(...)):
 @app.post('/redister')
 def test(username: str = Body(...), password: str = Body(...)):
 
+    user = db_action('''
+        select * from users where username = ? and password = ?
+    ''', (username, password), DBAction.fetchone)
+    if user != None:
+        return "Failed to register. This user does already exist."
+
     res = db_action('''
         insert into users (username, password) values (?, ?)
     ''', (username, password), DBAction.commit)
-    return "Success"
+    return "Successfully registered"
 
 uvicorn.run(app)
