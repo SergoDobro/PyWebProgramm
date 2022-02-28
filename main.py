@@ -57,12 +57,12 @@ def login(username: str = Body(...), password: str = Body(...)):
         return "Failed to log in"
     return "Successfully logged in"
 
-@app.post('/redister')
+@app.post('/register')
 def test(username: str = Body(...), password: str = Body(...)):
 
     user = db_action('''
-        select * from users where username = ? and password = ?
-    ''', (username, password), DBAction.fetchone)
+        select * from users where username = ?
+    ''', (username, ), DBAction.fetchone)
     if user != None:
         return "Failed to register. This user does already exist."
 
